@@ -9,7 +9,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_HEIGHT * SCREEN_WIDTH) / UNIT_SIZE;
-    static final int DELAY = 70;
+    static final int DELAY = 75;
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
     int bodyParts = 1;
@@ -132,12 +132,18 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Ink Free", Font.BOLD, 75));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("GAME OVER", (SCREEN_WIDTH - metrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
-        g.setColor(Color.RED);
 
+        g.setColor(Color.RED);
         g.setFont(new Font("Ink Free", Font.BOLD, 20));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: " + applesEaten)) / 2,
                 g.getFont().getSize());
+
+        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        g.drawString("r to restart", (SCREEN_WIDTH - metrics2.stringWidth("r to restart")) / 2,
+                (SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -147,6 +153,17 @@ public class GamePanel extends JPanel implements ActionListener {
             checkCollisions();
         }
         repaint();
+    }
+
+    public void restart() {
+        bodyParts = 1;
+        running = true;
+        applesEaten = 0;
+        x[0] = 0;
+        y[0] = 0;
+        direction = 'R';
+        timer.start();
+        newApple();
     }
 
     public class MyKeyAdapter extends KeyAdapter {
@@ -171,6 +188,9 @@ public class GamePanel extends JPanel implements ActionListener {
                     if (direction != 'U') {
                         direction = 'D';
                     }
+                    break;
+                case KeyEvent.VK_R:
+                    restart();
                     break;
             }
 
